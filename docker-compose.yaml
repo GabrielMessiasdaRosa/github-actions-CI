@@ -1,0 +1,42 @@
+version: '3.7'
+
+services:
+  nestjs-app:
+    build: .
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - pgdb
+    environment:
+      - POSTGRES_HOST=pgdb
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=nestjs
+    networks:
+      - default
+  pgdb:
+    image: postgres:latest
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: nestjs
+    volumes:
+      - ../pgdata:/var/lib/postgresql/data
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - '8080:80'
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - nestjs-app
+    networks:
+      - default
+
+networks:
+  default:
+    name: app-network
