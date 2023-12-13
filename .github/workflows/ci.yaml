@@ -17,6 +17,17 @@ jobs:
         run: npm run test
       - name: e2e Test
         run: npm run test:e2e
+      - name: Code Coverage
+        run: npm run test:cov
+      - name: SonarCloud
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   build-and-push-docker-image:
     runs-on: ubuntu-latest
     steps:
@@ -37,15 +48,5 @@ jobs:
           tags: motivado/github-actions-ci:latest
       ## - name: Build and push Docker images
       ##   uses: docker/build-push-action@v5.1.0
-  sonarcloud:
-    name: SonarCloud
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+    
