@@ -16,7 +16,7 @@ services:
     networks:
       - default
   pgdb:
-    image: postgres:latest
+    image: postgres:16.1
     ports:
       - '5432:5432'
     environment:
@@ -27,7 +27,7 @@ services:
       - ../pgdata:/var/lib/postgresql/data
 
   nginx:
-    image: nginx:latest
+    image: nginx:stable-alpine3.17
     ports:
       - '8080:80'
     volumes:
