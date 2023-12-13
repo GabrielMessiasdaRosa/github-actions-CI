@@ -4,6 +4,6 @@ import { Injectable } from '@nestjs/common';
 export class AppService {
   async getHello(): Promise<any> {
     const helloMessage = 'Full Cycle Rocks!';
-    return 'Full Cycle Rocks!';
+    return 'Full Cycle Rocks!' as any;
   }
 }
