@@ -1,5 +1,9 @@
 name: ci-nestjs-workflow
-on: [push]
+on: 
+  pull_request:
+    branches:
+      - development
+      - features/**
 jobs:
   check-and-test-nestapp:
     runs-on: ubuntu-latest
