@@ -1,5 +1,9 @@
 name: ci-nestjs-workflow
-on: [push]
+on: 
+  pull_request:
+    branches:
+      - development
+      - features/**
 jobs:
   check-and-test-nestapp:
     runs-on: ubuntu-latest
@@ -17,6 +21,30 @@ jobs:
         run: npm run test
       - name: e2e Test
         run: npm run test:e2e
+  sonar-cloud-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: latest
+      - name: Install dependencies
+        run: npm install
+      - name: Build
+        run: npm run build
+      - name: Code Coverage
+        run: npm run test:cov
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectBaseDir: .
+          args: >
+            -Dsonar.projectKey=fullcycle-course-gmr_githubci
+            -Dsonar.organization=fullcycle-course-gmr
   build-and-push-docker-image:
     runs-on: ubuntu-latest
     steps:
@@ -35,17 +63,4 @@ jobs:
         with:
           push: true
           tags: motivado/github-actions-ci:latest
-      ## - name: Build and push Docker images
-      ##   uses: docker/build-push-action@v5.1.0
-  sonarcloud:
-    name: SonarCloud
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
