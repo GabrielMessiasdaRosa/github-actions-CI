@@ -63,7 +63,4 @@ jobs:
         with:
           push: true
           tags: motivado/github-actions-ci:latest
-      ## - name: Build and push Docker images
-      ##   uses: docker/build-push-action@v5.1.0
 
-    
