@@ -23,15 +23,6 @@ jobs:
         run: npm run test:e2e
       - name: Code Coverage
         run: npm run test:cov
-      - name: SonarCloud
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   sonar-cloud-scan:
     runs-on: ubuntu-latest
     steps:
