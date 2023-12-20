@@ -31,6 +31,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectBaseDir: .
+          args: >
+            -Dsonar.projectKey=fullcycle-course-gmr_githubci
+            -Dsonar.organization=fullcycle-course-gmr
   build-and-push-docker-image:
     runs-on: ubuntu-latest
     steps:
